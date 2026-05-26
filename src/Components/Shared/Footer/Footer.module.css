@@ -1,0 +1,17 @@
+.clickAnimation {
+  animation: clickAnimation 2s ease-in-out infinite;
+}
+
+@keyframes clickAnimation {
+  0% {
+    @apply top-6;
+  }
+
+  50% {
+    @apply top-4;
+  }
+
+  100% {
+    @apply top-6;
+  }
+}

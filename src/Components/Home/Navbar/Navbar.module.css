@@ -1,0 +1,28 @@
+.navbarLinks {
+  letter-spacing: 1.2px;
+  @apply text-base md:text-base;
+}
+
+.navLink {
+  position: relative;
+}
+
+.navLink:hover {
+  letter-spacing: 2px;
+}
+
+.navLink::after {
+  content: "";
+  @apply absolute bottom-0 left-0 w-0 h-[2px] rounded-md bg-accent;
+  transition: all 0.5s;
+}
+
+.navLink:hover::after {
+  @apply w-full;
+}
+
+@media (max-width: 768px) {
+  .navbarLinks {
+    @apply absolute top-[58px] h-screen w-2/3 sm:w-1/2 p-3 bg-black/40;
+  }
+}

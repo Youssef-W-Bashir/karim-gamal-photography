@@ -1,0 +1,29 @@
+.scrollBall {
+  animation: scrollBall 2s ease-out infinite;
+}
+
+@keyframes scrollBall {
+  0% {
+    transform: translateY(0px);
+  }
+
+  48% {
+    transform: translateY(-20px);
+  }
+
+  49% {
+    transform: translate(20px, -10px);
+  }
+
+  50% {
+    transform: translate(20px, 50px);
+  }
+
+  51% {
+    transform: translate(0px, 50px);
+  }
+
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
