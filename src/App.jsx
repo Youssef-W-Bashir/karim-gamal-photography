@@ -5,6 +5,7 @@ import Home from "./Pages/Home";
 import Layout from "./Layout";
 import Gallery from "./Pages/Gallery";
 import FilterImgContextProvider from "./Context/FilterImgContext";
+import { Analytics } from "@vercel/analytics/react";
 
 let routers = createBrowserRouter([
   {
@@ -21,7 +22,9 @@ function App() {
   return (
     <>
       <FilterImgContextProvider>
-        <RouterProvider router={routers}></RouterProvider>
+        <RouterProvider router={routers}>
+          <Analytics />
+        </RouterProvider>
       </FilterImgContextProvider>
     </>
   );

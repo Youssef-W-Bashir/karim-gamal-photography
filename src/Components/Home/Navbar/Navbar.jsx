@@ -37,7 +37,7 @@ export default function Navbar() {
           <div className="nav-brand">
             {/* nav-title */}
             <div className="nav-title flex md:block justify-between items-center">
-              <div className="flex font-bold drop-shadow-glow md:block text-center items-center text-text-primary font-prata text-2xl md:text-3xl tracking-wide group cursor-pointer">
+              <div className="flex font-bold drop-shadow-glow md:block text-center items-center text-text-primary font-prata text-2xl md:text-3xl tracking-wide group">
                 <img
                   src={KGLogo}
                   alt="KG_Logo"

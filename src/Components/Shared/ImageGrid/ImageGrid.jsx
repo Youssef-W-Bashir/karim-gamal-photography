@@ -1,15 +1,17 @@
 import { useContext, useState, useEffect } from "react";
 import { FilterImgContext } from "../../../Context/FilterImgContext";
 
-export default function ImageGrid({ limited, id }) {
+export default function ImageGrid({ limited, id, activeCategory }) {
   let { filteredImages } = useContext(FilterImgContext);
 
   const [openModal, setOpenModal] = useState(false);
   const [indexImage, setIndexImage] = useState(null);
 
-  // Loading لكل صورة
   const [loadingImages, setLoadingImages] = useState({});
   const [modalLoading, setModalLoading] = useState(true);
+
+  // pagination loading
+  const [pageLoading, setPageLoading] = useState(false);
 
   useEffect(() => {
     if (openModal) {
@@ -22,13 +24,17 @@ export default function ImageGrid({ limited, id }) {
   let [currentPage, setCurrentPage] = useState(1);
 
   let totalPages = Math.ceil(limited.length / itemsPerPage);
-
-  let indexOfLastItem = currentPage * itemsPerPage;
+  let safePage = Math.min(currentPage, totalPages) || 1;
+  let indexOfLastItem = safePage * itemsPerPage;
   let indexOfFirstItem = indexOfLastItem - itemsPerPage;
-
   let currentImages = limited.slice(indexOfFirstItem, indexOfLastItem);
 
-  // الاسكرول لما يحصل تغيير
+  // reset الصفحة لما الـ category يتغير
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory]);
+
+  // لما بيتغير الصفحة نبدأ الـ loader
   const [firstOpenPage, setFirstOpenPage] = useState(true);
   useEffect(() => {
     if (firstOpenPage) {
@@ -36,13 +42,26 @@ export default function ImageGrid({ limited, id }) {
       return;
     }
 
+    setPageLoading(true);
+    setLoadingImages({});
+
     document.getElementById("gallerySc")?.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
   }, [currentPage]);
 
-  // رقم الصوره فى المودال
+  // لما صورة تخلص تتحمل نشوف هل كل الصور خلصت
+  const handleImageLoad = (index) => {
+    setLoadingImages((prev) => {
+      const updated = { ...prev, [index]: true };
+      if (Object.keys(updated).length >= currentImages.length) {
+        setPageLoading(false);
+      }
+      return updated;
+    });
+  };
+
   let imageNum = indexImage + 1;
 
   return (
@@ -51,7 +70,6 @@ export default function ImageGrid({ limited, id }) {
         {/* الباجينيشن */}
         {limited.length > itemsPerPage && (
           <div className="flex justify-center items-center gap-3 my-6">
-            {/* Prev */}
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               className="px-4 py-2 border border-white/10 text-gray-300 hover:text-accent"
@@ -60,13 +78,12 @@ export default function ImageGrid({ limited, id }) {
             </button>
 
             <div className="flex md:gap-3">
-              {/* Pages */}
               {Array.from({ length: totalPages }).map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentPage(index + 1)}
                   className={`px-3 py-1 border ${
-                    currentPage === index + 1
+                    safePage === index + 1
                       ? "border-accent text-accent"
                       : "border-white/10 text-gray-400"
                   }`}
@@ -76,7 +93,6 @@ export default function ImageGrid({ limited, id }) {
               ))}
             </div>
 
-            {/* Next */}
             <button
               onClick={() =>
                 setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev))
@@ -88,8 +104,21 @@ export default function ImageGrid({ limited, id }) {
           </div>
         )}
 
+        {/* Page loader */}
+        {pageLoading && (
+          <div className="flex justify-center items-center py-32">
+            <div className="w-10 h-10 border-2 border-gray-500 border-t-accent rounded-full animate-spin" />
+          </div>
+        )}
+
         {/* images grid */}
-        <div className="columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-6 space-y-4 sm:space-y-6">
+        <div
+          className={`columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-6 space-y-4 sm:space-y-6 transition-opacity duration-300 ${
+            pageLoading
+              ? "opacity-0 pointer-events-none h-0 overflow-hidden"
+              : "opacity-100"
+          }`}
+        >
           {currentImages.map((image, index) => (
             <div
               key={index}
@@ -99,9 +128,7 @@ export default function ImageGrid({ limited, id }) {
               }}
               className="group relative break-inside-avoid overflow-hidden rounded-sm bg-[#111]"
             >
-              {/* loadingg image */}
               <div className="relative w-full overflow-hidden bg-[#1a1a1a]">
-                {/* Skeleton */}
                 {!loadingImages[index] && (
                   <div className="absolute inset-0 animate-pulse bg-[#222]" />
                 )}
@@ -110,12 +137,7 @@ export default function ImageGrid({ limited, id }) {
                   src={image.src}
                   alt={image.category}
                   loading="lazy"
-                  onLoad={() =>
-                    setLoadingImages((prev) => ({
-                      ...prev,
-                      [index]: true,
-                    }))
-                  }
+                  onLoad={() => handleImageLoad(index)}
                   className={`w-full h-auto object-cover scale-110 group-hover:scale-125 ${
                     loadingImages[index]
                       ? "opacity-100 blur-0"
@@ -135,7 +157,6 @@ export default function ImageGrid({ limited, id }) {
                 )}
               </div>
 
-              {/* overlay */}
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 flex items-end">
                 <div className="w-full p-4 sm:p-6 translate-y-full group-hover:translate-y-0">
                   <div className="flex items-center justify-between">
@@ -147,7 +168,6 @@ export default function ImageGrid({ limited, id }) {
                 </div>
               </div>
 
-              {/* Corner accent */}
               <div className="absolute top-0 right-0 w-12 h-12 opacity-0 group-hover:opacity-100">
                 <div className="absolute top-3 right-3 w-6 h-[1px] bg-accent" />
                 <div className="absolute top-3 right-3 w-[1px] h-6 bg-accent" />
@@ -156,7 +176,6 @@ export default function ImageGrid({ limited, id }) {
           ))}
         </div>
 
-        {/* لو مفيش صور */}
         {filteredImages.length === 0 && (
           <div className="text-center py-20">
             <p className="text-gray-600 tracking-widest text-base md:text-lg">
@@ -168,7 +187,6 @@ export default function ImageGrid({ limited, id }) {
         {/* الباجينيشن */}
         {limited.length > itemsPerPage && (
           <div className="flex justify-center items-center gap-3 my-6">
-            {/* Prev */}
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               className="px-4 py-2 border border-white/10 text-gray-300 hover:text-accent"
@@ -177,13 +195,12 @@ export default function ImageGrid({ limited, id }) {
             </button>
 
             <div className="flex md:gap-3">
-              {/* Pages */}
               {Array.from({ length: totalPages }).map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setCurrentPage(i + 1)}
                   className={`px-3 py-1 border ${
-                    currentPage === i + 1
+                    safePage === i + 1
                       ? "border-accent text-accent"
                       : "border-white/10 text-gray-400"
                   }`}
@@ -193,7 +210,6 @@ export default function ImageGrid({ limited, id }) {
               ))}
             </div>
 
-            {/* Next */}
             <button
               onClick={() =>
                 setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev))
@@ -206,15 +222,13 @@ export default function ImageGrid({ limited, id }) {
         )}
       </div>
 
-      {/* El moadal */}
-
+      {/* Modal */}
       {openModal && (
         <div className="fixed inset-0 z-[80] bg-black/80 backdrop-blur-sm flex items-center justify-center">
           <div
             onClick={() => setOpenModal(false)}
             className="z-[90] w-full h-screen absolute"
           />
-          {/* Close */}
           <button
             onClick={() => {
               setOpenModal(false);
@@ -225,7 +239,6 @@ export default function ImageGrid({ limited, id }) {
             <i className="fa-solid fa-xmark text-xl"></i>
           </button>
 
-          {/* Prev */}
           <button
             onClick={() => {
               if (indexImage === 0) {
@@ -239,7 +252,6 @@ export default function ImageGrid({ limited, id }) {
             <i className="fa-solid fa-chevron-left"></i>
           </button>
 
-          {/* Next */}
           <button
             onClick={() => {
               if (indexImage < limited.length - 1) {
@@ -253,10 +265,8 @@ export default function ImageGrid({ limited, id }) {
             <i className="fa-solid fa-chevron-right"></i>
           </button>
 
-          {/* Image */}
           <div className="relative z-[100] max-w-5xl max-h-[85vh] w-full mx-4 flex items-center justify-center">
             <div className="relative flex items-center justify-center">
-              {/* Loading images */}
               {modalLoading && (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-10 h-10 border-2 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
@@ -265,6 +275,7 @@ export default function ImageGrid({ limited, id }) {
 
               <img
                 src={limited[indexImage]?.src}
+                loading="lazy"
                 alt=""
                 onLoad={() => setModalLoading(false)}
                 className={`max-w-full max-h-[80vh] object-contain transition-all duration-300 ${
@@ -273,7 +284,6 @@ export default function ImageGrid({ limited, id }) {
               />
             </div>
 
-            {/* ترقيم الصور */}
             <div className="absolute bottom-0 left-0 right-0 p-4 bg-black">
               <div className="flex justify-between max-w-5xl mx-auto">
                 <span className="text-accent text-xs uppercase">

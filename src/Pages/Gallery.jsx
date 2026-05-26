@@ -8,7 +8,8 @@ import ImageGrid from "../Components/Shared/ImageGrid/ImageGrid";
 import VideoGrid from "../Components/Gallery/VideoGrid/VideoGrid";
 
 export default function Gallery() {
-  const { activeMedia, filteredImages } = useContext(FilterImgContext);
+  const { activeMedia, activeCategory, filteredImages } =
+    useContext(FilterImgContext);
 
   let limited = filteredImages;
 
@@ -84,7 +85,11 @@ export default function Gallery() {
         {/* Content */}
         <main className="pt-5 px-4 sm:px-6 lg:px-8 xl:px-12 pb-20">
           {activeMedia === "photos" ? (
-            <ImageGrid id={"gallerySc"} limited={limited} />
+            <ImageGrid
+              id={"gallerySc"}
+              limited={limited}
+              activeCategory={activeCategory}
+            />
           ) : (
             <VideoGrid />
           )}

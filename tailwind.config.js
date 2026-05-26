@@ -50,21 +50,8 @@ export default {
         glow: "0 0 10px var(--accent)",
         "glow-lg": "0 0 20px var(--accent)"
       },
-      keyframes: {
-        goldPulse: {
-          "0%, 100%": {
-            textShadow: "0 0 6px #c9a227, 0 0 12px #c9a22733",
-            opacity: "0.9",
-          },
-          "50%": {
-            textShadow: "0 0 12px #c9a227, 0 0 25px #c9a22766",
-            opacity: "1",
-          },
-        },
-      },
-      animation: {
-        "gold-pulse": "goldPulse 2s ease-in-out infinite",
-      },
+
+
     },
   },
   plugins: [],
