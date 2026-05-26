@@ -74,7 +74,7 @@ npm install
 
 ## 🌐 Live Demo
 
-Try the app live : https://karim-gamal-photography-x14l-dfq6lgw85.vercel.app/
+Try the app live : https://karim-gamal-photography-x14l.vercel.app/
 
 ---
 
