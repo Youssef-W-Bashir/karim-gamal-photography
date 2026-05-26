@@ -86,6 +86,7 @@ export default function Gallery() {
         <main className="pt-5 px-4 sm:px-6 lg:px-8 xl:px-12 pb-20">
           {activeMedia === "photos" ? (
             <ImageGrid
+              key={activeCategory}
               id={"gallerySc"}
               limited={limited}
               activeCategory={activeCategory}

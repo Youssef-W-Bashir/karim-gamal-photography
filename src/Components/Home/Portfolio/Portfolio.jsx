@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import style from "./Portfolio.module.css";
 import { FilterImgContext } from "../../../Context/FilterImgContext";
 import { Link } from "react-router-dom";
@@ -6,8 +6,13 @@ import CategoryNav from "../../Shared/CategoryNav/CategoryNav";
 import ImageGrid from "../../Shared/ImageGrid/ImageGrid";
 
 export default function Portfolio() {
-  let { categories, setActiveMedia, filteredImages, setActiveCategory } =
-    useContext(FilterImgContext);
+  let {
+    categories,
+    setActiveMedia,
+    filteredImages,
+    activeCategory,
+    setActiveCategory,
+  } = useContext(FilterImgContext);
 
   let limited = filteredImages.slice(0, 8);
 
@@ -122,7 +127,11 @@ export default function Portfolio() {
 
         {/* ImageGrid */}
         <div className="px-3 md:px-6">
-          <ImageGrid limited={limited} />
+          <ImageGrid
+            key={activeCategory}
+            limited={limited}
+            activeCategory={activeCategory}
+          />
         </div>
       </section>
     </>

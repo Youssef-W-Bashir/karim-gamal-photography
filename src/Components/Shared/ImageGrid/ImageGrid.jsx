@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect } from "react";
 import { FilterImgContext } from "../../../Context/FilterImgContext";
 
 export default function ImageGrid({ limited, id, activeCategory }) {
@@ -10,7 +10,6 @@ export default function ImageGrid({ limited, id, activeCategory }) {
   const [loadingImages, setLoadingImages] = useState({});
   const [modalLoading, setModalLoading] = useState(true);
 
-  // pagination loading
   const [pageLoading, setPageLoading] = useState(false);
 
   useEffect(() => {
@@ -29,26 +28,11 @@ export default function ImageGrid({ limited, id, activeCategory }) {
   let indexOfFirstItem = indexOfLastItem - itemsPerPage;
   let currentImages = limited.slice(indexOfFirstItem, indexOfLastItem);
 
-  const isFirstRender = useRef(true);
-  const categoryChanging = useRef(false);
-
-  // لما الـ category يتغير: reset بدون loader
+  // لما الصفحة تتغير: شغل الـ loader
+  const [isFirstRender, setIsFirstRender] = useState(true);
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    categoryChanging.current = true;
-    setCurrentPage(1);
-    setLoadingImages({});
-    setPageLoading(false);
-  }, [activeCategory]);
-
-  // لما الصفحة تتغير بالباجينيشن بس: شغل الـ loader
-  useEffect(() => {
-    if (isFirstRender.current) return;
-    if (categoryChanging.current) {
-      categoryChanging.current = false;
+    if (isFirstRender) {
+      setIsFirstRender(false);
       return;
     }
     setPageLoading(true);
