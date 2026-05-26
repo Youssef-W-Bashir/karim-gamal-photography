@@ -95,17 +95,6 @@ This project uses Cloudinary for optimized image and video delivery.
 </div>
 ---
 
-## 🚀 Future Improvements
-
-- 🔄 Infinite scroll instead of pagination
-- 🎞️ Advanced video player controls
-- ❤️ Favorites system for images/videos
-- 🌙 Dark/Light mode toggle
-- 🔍 Advanced search and filtering
-- ⚡ Preloading next media for smoother UX
-
----
-
 ## Author
 
 - **Youssef waleed beshir**
