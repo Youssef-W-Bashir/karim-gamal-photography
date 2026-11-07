@@ -85,7 +85,7 @@ export default function Services() {
               {/* Main Image */}
               <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/5">
                 <img
-                  src="https://res.cloudinary.com/dkxt2ew0f/image/upload/q_auto/v1779751342/wedding_mpdnbm.jpg"
+                  src="https://res.cloudinary.com/dkxt2ew0f/image/upload/w_1200,f_auto,q_auto/v1779749016/IMG_9992_xjmujm.jpg"
                   alt=""
                   className="h-[500px] md:h-[650px] w-full object-cover"
                 />
@@ -124,7 +124,7 @@ export default function Services() {
               {/* Main Image */}
               <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/5">
                 <img
-                  src="https://res.cloudinary.com/dkxt2ew0f/image/upload/v1779731087/DXsCFt0jSTn_JPG__28_uxcazz.jpg"
+                  src="https://4cs.gia.edu/wp-content/uploads/2025/10/traditional-wedding-band-engagement-ring-placement_VRL-324157_Mobile-960x800-1.webp"
                   alt=""
                   className="h-[500px] md:h-[650px] w-full object-cover"
                 />

@@ -171,7 +171,7 @@ export default function ImageGrid({ limited, id, activeCategory }) {
         {filteredImages.length === 0 && (
           <div className="text-center py-20">
             <p className="text-gray-600 tracking-widest text-base md:text-lg">
-              No images Now <br /> SoOoOoOoOoOoN !!!!!
+              These photos have been made private <br /> by the Photographer !!!!
             </p>
           </div>
         )}
